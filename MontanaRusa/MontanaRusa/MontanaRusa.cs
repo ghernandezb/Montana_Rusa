@@ -24,6 +24,7 @@ namespace MontanaRusa
 
         public MontanaRusa(int minutosEspera, int minutosDuracion, float alturaMinima, int numeroCarritos, int numeroAsientos)
         {
+            AlturaMinima = alturaMinima;
             Carritos = new List<Carrito>();
             ListaEspera = new List<Persona>();
 
@@ -49,6 +50,21 @@ namespace MontanaRusa
             }
 
             return listaChequeo;
+        }
+
+        public Asiento ObtenerCampoDisponible()
+        {
+            foreach (Carrito carrito in Carritos)
+            {
+                foreach (Asiento asiento in carrito.Asientos)
+                {
+                    if (asiento.Persona == null)
+                    {
+                        return asiento;
+                    }
+                }
+            }
+            return null;
         }
     }
 }

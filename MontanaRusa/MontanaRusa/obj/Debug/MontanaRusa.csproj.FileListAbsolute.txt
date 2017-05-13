@@ -1,0 +1,6 @@
+C:\Users\Discovery XP\Documents\GitHub\Montana_Rusa\MontanaRusa\MontanaRusa\bin\Debug\MontanaRusa.exe.config
+C:\Users\Discovery XP\Documents\GitHub\Montana_Rusa\MontanaRusa\MontanaRusa\bin\Debug\MontanaRusa.exe
+C:\Users\Discovery XP\Documents\GitHub\Montana_Rusa\MontanaRusa\MontanaRusa\bin\Debug\MontanaRusa.pdb
+C:\Users\Discovery XP\Documents\GitHub\Montana_Rusa\MontanaRusa\MontanaRusa\obj\Debug\MontanaRusa.csprojResolveAssemblyReference.cache
+C:\Users\Discovery XP\Documents\GitHub\Montana_Rusa\MontanaRusa\MontanaRusa\obj\Debug\MontanaRusa.exe
+C:\Users\Discovery XP\Documents\GitHub\Montana_Rusa\MontanaRusa\MontanaRusa\obj\Debug\MontanaRusa.pdb

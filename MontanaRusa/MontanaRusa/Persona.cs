@@ -16,10 +16,10 @@ namespace MontanaRusa
     class Persona
     {
         public string Nombre { get; private set; }
-        public double Altura { get; private set; }
+        public float Altura { get; private set; }
         public PersonaEstadosAnimos EstadoAnimo { get; private set; }
 
-        public Persona (string nombre, double altura, PersonaEstadosAnimos estadoAnimo)
+        public Persona (string nombre, float altura, PersonaEstadosAnimos estadoAnimo)
         {
             Nombre = nombre;
             Altura = altura;

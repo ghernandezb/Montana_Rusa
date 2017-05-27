@@ -35,12 +35,15 @@ namespace MontanaRusa
                 Console.WriteLine("1. Montar pasajeros");
                 Console.WriteLine("2. Correr atraccion");
                 Console.WriteLine("3. Refrescar lista de espera");
-                Console.WriteLine("4. Salir del programa");
+                Console.WriteLine("4. Asegurar asientos no asegurados");
+                Console.WriteLine("5. Bajar gente asustada");
+                Console.WriteLine("6. Bajar gente violenta");
+                Console.WriteLine("0. Salir del programa");
                 Console.WriteLine("");
 
                 string respuestaMenu = Console.ReadLine();
                 numeroMenu = ComprobacionNumero(respuestaMenu, valorInicialMenu, valorFinalMenu);
-                if (DateTime.Now.AddMinutes(-5) > montanaRusa.FechaSalida)
+                if (DateTime.Now.AddMinutes(-montanaRusa.MinutosDuracion) > montanaRusa.FechaSalida)
                 {
                     montanaRusa.FechaSalida = null;
                 }
@@ -48,6 +51,7 @@ namespace MontanaRusa
                 {
                     case 1:
                         // Montar pasajeros
+                        int numeroIngresados = 0;
                         if (montanaRusa.FechaSalida == null)
                         {
                             for (int i = 0; i < montanaRusa.ListaEspera.Count; i++)
@@ -61,19 +65,33 @@ namespace MontanaRusa
                                         asiento.Persona = persona;
                                         montanaRusa.ListaEspera.RemoveAt(i);
                                         i--;
+                                        numeroIngresados++;
+                                        Console.WriteLine("Ha ingresado " + persona.Nombre);
+                                        Console.WriteLine("");
                                     }
                                     else
                                     {
+                                        Console.WriteLine("No hay mas campos disponibles");
+                                        Console.WriteLine("");
                                         break;
                                     }
                                 }
                                 else
                                 {
+                                    Console.WriteLine(persona.Nombre + " no cumple con la estatura requerida, se ha removido de la fila ");
+                                    Console.WriteLine("");
                                     montanaRusa.ListaEspera.RemoveAt(i);
                                     i--;
                                 }
                             }
-                        }                        
+                            Console.WriteLine("Han ingresado "+ numeroIngresados + " nuevos pasajeros.");
+                            Console.WriteLine("");
+                        }
+                        else
+                        {
+                            Console.WriteLine("La atraccion no se ha detenido");
+                            Console.WriteLine("");
+                        }                       
 
                         break;
 
@@ -88,6 +106,21 @@ namespace MontanaRusa
                         break;
 
                     case 4:
+                        // Asegurar asientos no asegurados
+
+                        break;
+
+                    case 5:
+                        // bajar gente asustada
+
+                        break;
+
+                    case 6:
+                        // Bajar gente violenta
+
+                        break;
+
+                    case 0:
                         // Salir
                         opcionMenu = false;
                         break;

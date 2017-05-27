@@ -86,6 +86,8 @@ namespace MontanaRusa
                             }
                             Console.WriteLine("Han ingresado "+ numeroIngresados + " nuevos pasajeros.");
                             Console.WriteLine("");
+                            Console.WriteLine("");
+                            Console.WriteLine("");
                         }
                         else
                         {

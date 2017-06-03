@@ -17,7 +17,7 @@ namespace MontanaRusa
         //----- MENU -----//
         public static void Menu()
         {
-            MontanaRusa montanaRusa = new MontanaRusa(2, 3, 1.5f, 3, 5);
+            MontanaRusa montanaRusa = new MontanaRusa(1, 3, 1.5f, 3, 5);
 
             bool opcionMenu = true;
             int numeroMenu = -1;
@@ -46,6 +46,11 @@ namespace MontanaRusa
                 {
                     montanaRusa.FechaSalida = null;
                 }
+                if (DateTime.Now.AddMinutes(-montanaRusa.MinutosEspera) > montanaRusa.FechaEspera)
+                {
+                    montanaRusa.FechaEspera = null;
+                }
+                Random ran = new Random();
                 switch (numeroMenu)
                 {
                     case 1:
@@ -110,12 +115,77 @@ namespace MontanaRusa
 
                     case 2:
                         // Correr atraccion
+                        bool listo;
+
+                        foreach (Carrito carrito in montanaRusa.Carritos)
+                        {
+                            foreach (Asiento asiento in carrito.Asientos)
+                            {
+                                asiento.Asegurado = ran.Next(0, 100) < 99;
+                            }
+                        }
+
+                        var listaDeChequeo = montanaRusa.Chequear(out listo);
+                        var numeroPersonasAsustadas = 0;
+                        var numeroPersonasEnojadas = 0;
+                        var numeroAsientosNoAsegurados = 0;
+
+                        foreach (var item in listaDeChequeo)
+                        {
+                            switch (item)
+                            {
+                                case ListaChequeo.PersonaEnojada:
+                                    numeroPersonasEnojadas++;
+                                    break;
+                                case ListaChequeo.PersonaAsustada:
+                                    numeroPersonasAsustadas++;
+                                    break;
+                                case ListaChequeo.AsientoNoAsegurado:
+                                    numeroAsientosNoAsegurados++;
+                                    break;
+                            }
+                        }
+
+                        if (listaDeChequeo.Contains(ListaChequeo.AtraccionEnCurso))
+                        {
+                            Console.WriteLine("No se puede iniciar atraccion que ya esta en curso.");
+                        }
+
+                        if (listaDeChequeo.Contains(ListaChequeo.TiempoDeEsperaNoFinalizado))
+                        {
+                            Console.WriteLine("No se puede iniciar atraccion que esta en espera.");
+                        }
+
+                        if (numeroAsientosNoAsegurados > 0)
+                        {
+                            Console.WriteLine("No se puede iniciar por que hay " + numeroAsientosNoAsegurados + " asiento(s) no asegurado(s).");
+                        }
+
+                        if (numeroPersonasAsustadas > 0)
+                        {
+                            Console.WriteLine("No se puede iniciar por que hay " + numeroPersonasAsustadas + " persona(s) asustada(s).");
+                        }
+
+                        if (numeroPersonasEnojadas > 0)
+                        {
+                            Console.WriteLine("No se puede iniciar por que hay " + numeroPersonasEnojadas + " persona(s) enojada(s).");
+                        }
+
+                        if (listaDeChequeo.Contains(ListaChequeo.AtraccionVacia))
+                        {
+                            Console.WriteLine("No se puede iniciar atraccion ya que se encuentra vacia o falta gente.");
+                        }
+
+                        if (listo)
+                        {
+                            montanaRusa.FechaSalida = DateTime.Now;
+                            Console.WriteLine("La atraccion se encuentra en curso.");
+                        }
 
                         break;
 
                     case 3:
                         // Refrescar lista de espera
-                        Random ran = new Random();
                         int numeroRandom = ran.Next(0, 15);
 
                         for (int i = 1; i<= numeroRandom; i++)
@@ -153,17 +223,54 @@ namespace MontanaRusa
 
                     case 4:
                         // Asegurar asientos no asegurados
-
+                        foreach (Carrito carrito in montanaRusa.Carritos)
+                        {
+                            foreach (Asiento asiento in carrito.Asientos)
+                            {
+                                if (!asiento.Asegurado)
+                                {
+                                    asiento.Asegurado = true;
+                                    Console.WriteLine("Un asiento se ha asegurado.");
+                                    Console.WriteLine("");
+                                }
+                            }
+                        }
                         break;
 
                     case 5:
                         // bajar gente asustada
-
+                        foreach (Carrito carrito in montanaRusa.Carritos)
+                        {
+                            foreach (Asiento asiento in carrito.Asientos)
+                            {
+                                if (asiento.Persona !=null && asiento.Persona.EstadoAnimo == PersonaEstadosAnimos.Asustado)
+                                {
+                                    string tempName = asiento.Persona.Nombre;
+                                    asiento.Persona = null;
+                                    asiento.Asegurado = false;
+                                    Console.WriteLine(tempName + " ha salido de la atraccion pues se encontraba asustad@.");
+                                    Console.WriteLine("");
+                                }
+                            }
+                        }
                         break;
 
                     case 6:
                         // Bajar gente violenta
-
+                        foreach (Carrito carrito in montanaRusa.Carritos)
+                        {
+                            foreach (Asiento asiento in carrito.Asientos)
+                            {
+                                if (asiento.Persona != null && asiento.Persona.EstadoAnimo == PersonaEstadosAnimos.Enojado)
+                                {
+                                    string tempName = asiento.Persona.Nombre;
+                                    asiento.Persona = null;
+                                    asiento.Asegurado = false;
+                                    Console.WriteLine(tempName + " ha salido de la atraccion pues se encontraba violent@.");
+                                    Console.WriteLine("");
+                                }
+                            }
+                        }
                         break;
 
                     case 0:

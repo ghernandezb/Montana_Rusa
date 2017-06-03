@@ -1,0 +1,6 @@
+TAREA
+Vaciar asientos (actualizacion)
+
+Opcional
+reingresar gente a la fila
+Loguee quien se metio a la fila de nuevo y tiene que quedar de ultimo

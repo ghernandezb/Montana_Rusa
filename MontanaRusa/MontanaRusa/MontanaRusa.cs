@@ -9,7 +9,11 @@ namespace MontanaRusa
     enum ListaChequeo
     {
         AsientoNoAsegurado = 1,
-
+        PersonaEnojada,
+        PersonaAsustada,
+        TiempoDeEsperaNoFinalizado,
+        AtraccionEnCurso,
+        AtraccionVacia
     }
 
     class MontanaRusa
@@ -27,6 +31,8 @@ namespace MontanaRusa
             AlturaMinima = alturaMinima;
             Carritos = new List<Carrito>();
             ListaEspera = new List<Persona>();
+            MinutosEspera = minutosEspera;
+            MinutosDuracion = minutosDuracion;
 
             for (int i = 0; i < numeroCarritos; i++)
             {
@@ -34,9 +40,18 @@ namespace MontanaRusa
             }
         }
 
-        public List<ListaChequeo> Chequear()
+        public List<ListaChequeo> Chequear(out bool pasoLista)
         {
             List<ListaChequeo> listaChequeo = new List<ListaChequeo>();
+
+            if (FechaSalida != null)
+            {
+                listaChequeo.Add(ListaChequeo.AtraccionEnCurso);
+            }
+            else if (FechaEspera != null)
+            {
+                listaChequeo.Add(ListaChequeo.TiempoDeEsperaNoFinalizado);
+            }
 
             foreach (Carrito carrito in Carritos)
             {
@@ -46,9 +61,27 @@ namespace MontanaRusa
                     {
                         listaChequeo.Add(ListaChequeo.AsientoNoAsegurado);
                     }
+
+                    if (asiento.Persona != null)
+                    {
+                        if (asiento.Persona.EstadoAnimo == PersonaEstadosAnimos.Asustado)
+                        {
+                            listaChequeo.Add(ListaChequeo.PersonaAsustada);
+                        }
+                        else if (asiento.Persona.EstadoAnimo == PersonaEstadosAnimos.Enojado)
+                        {
+                            listaChequeo.Add(ListaChequeo.PersonaEnojada);
+                        }
+                    }
                 }
             }
 
+            if (EstaVacio())
+            {
+                listaChequeo.Add(ListaChequeo.AtraccionVacia);
+            }
+
+            pasoLista = listaChequeo.Count == 0;
             return listaChequeo;
         }
 
@@ -65,6 +98,21 @@ namespace MontanaRusa
                 }
             }
             return null;
+        }
+
+        public bool EstaVacio()
+        {
+            foreach (Carrito carrito in Carritos)
+            {
+                foreach (Asiento asiento in carrito.Asientos)
+                {
+                    if (asiento.Persona != null)
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
     }
 }

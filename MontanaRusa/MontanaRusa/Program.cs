@@ -17,7 +17,7 @@ namespace MontanaRusa
         //----- MENU -----//
         public static void Menu()
         {
-            MontanaRusa montanaRusa = new MontanaRusa(1, 3, 1.5f, 3, 5);
+            MontanaRusa montanaRusa = new MontanaRusa(1, 1, 1.5f, 3, 5);
 
             bool opcionMenu = true;
             int numeroMenu = -1;

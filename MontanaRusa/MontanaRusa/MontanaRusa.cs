@@ -48,7 +48,7 @@ namespace MontanaRusa
             {
                 listaChequeo.Add(ListaChequeo.AtraccionEnCurso);
             }
-            else if (FechaEspera != null)
+            else if (DateTime.Now.AddMinutes(-MinutosEspera) < FechaEspera && ObtenerCampoDisponible() != null)
             {
                 listaChequeo.Add(ListaChequeo.TiempoDeEsperaNoFinalizado);
             }

@@ -23,6 +23,7 @@ namespace MontanaRusa
             int numeroMenu = -1;
             int valorInicialMenu = 0;
             int valorFinalMenu = 6;
+            Random ran = new Random();
 
             Console.WriteLine("Hola!");
             Console.WriteLine("");
@@ -44,13 +45,33 @@ namespace MontanaRusa
                 numeroMenu = ComprobacionNumero(respuestaMenu, valorInicialMenu, valorFinalMenu);
                 if (DateTime.Now.AddMinutes(-montanaRusa.MinutosDuracion) > montanaRusa.FechaSalida)
                 {
+                    Console.WriteLine("La atraccion termino.");
                     montanaRusa.FechaSalida = null;
+
+                    // Inicio de bajada de gente
+                    foreach (Carrito carrito in montanaRusa.Carritos)
+                    {
+                        foreach (Asiento asiento in carrito.Asientos)
+                        {
+                            if (asiento.Persona != null)
+                            {
+                                int volveraSubir = ran.Next(0, 100);
+
+                                if (volveraSubir <= 20)
+                                {
+                                    montanaRusa.ListaEspera.Add(asiento.Persona);
+                                    Console.WriteLine(asiento.Persona.Nombre + " ha ingresado nuevamente a la fila.");
+                                    Console.WriteLine("");
+                                }
+                                else
+                                {
+                                    Console.WriteLine(asiento.Persona.Nombre + " ha salido de la atraccion.");
+                                }
+                            }
+                            asiento.Persona = null;
+                        }
+                    }
                 }
-                if (DateTime.Now.AddMinutes(-montanaRusa.MinutosEspera) > montanaRusa.FechaEspera)
-                {
-                    montanaRusa.FechaEspera = null;
-                }
-                Random ran = new Random();
                 switch (numeroMenu)
                 {
                     case 1:
@@ -92,17 +113,23 @@ namespace MontanaRusa
                             Console.WriteLine("Han ingresado " + numeroIngresados + " nuevos pasajeros.");
                             Console.WriteLine("");
 
-                            if (montanaRusa.ObtenerCampoDisponible() == null)
+                            if (numeroIngresados > 0)
                             {
-                                montanaRusa.FechaEspera = null;
-                                Console.WriteLine("Todos los carritos estan llenos, listo para salir.");
-                                Console.WriteLine("");
-                            }
-                            else if (numeroIngresados > 0 && montanaRusa.FechaEspera == null)
-                            {
-                                montanaRusa.FechaEspera = DateTime.Now;
-                                Console.WriteLine("Carritos aun no llenos, esperando mas pasajeros.");
-                                Console.WriteLine("");
+                                if (montanaRusa.FechaEspera == null)
+                                {
+                                    montanaRusa.FechaEspera = DateTime.Now;
+                                }
+
+                                if (montanaRusa.ObtenerCampoDisponible() == null)
+                                {
+                                    Console.WriteLine("Todos los carritos estan llenos.");
+                                    Console.WriteLine("");
+                                }
+                                else
+                                {
+                                    Console.WriteLine("Carritos aun no llenos, esperando mas pasajeros.");
+                                    Console.WriteLine("");
+                                }
                             }
                         }
                         else
@@ -178,6 +205,7 @@ namespace MontanaRusa
 
                         if (listo)
                         {
+                            montanaRusa.FechaEspera = null;
                             montanaRusa.FechaSalida = DateTime.Now;
                             Console.WriteLine("La atraccion se encuentra en curso.");
                         }
